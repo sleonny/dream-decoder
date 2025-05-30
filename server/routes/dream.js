@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-
-import { OpenAI } from "openai";
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
+const { OpenAI } = require("openai");
 
 dotenv.config();
 
