@@ -14,7 +14,7 @@ function App() {
     setInterpretation("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/dream", { dream });
+      const response = await axios.post("/api/dream", { dream });
       setInterpretation(response.data.message);
     } catch (err) {
       console.error(err);

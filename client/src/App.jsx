@@ -1,9 +1,8 @@
-
 import DreamForm from "./DreamForm";
 
 function App() {
   return (
-    <div className="min-h-screen bg-white">
+    <div>
       <DreamForm />
     </div>
   );
