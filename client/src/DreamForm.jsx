@@ -1,41 +1,55 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function DreamForm() {
+function App() {
   const [dream, setDream] = useState("");
-  const [response, setResponse] = useState("");
+  const [interpretation, setInterpretation] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+    setInterpretation("");
+
     try {
-      const res = await axios.post("http://localhost:5000/api/dream", { dream });
-      setResponse(res.data.message);
+      const response = await axios.post("http://localhost:5000/api/dream", { dream });
+      setInterpretation(response.data.message);
     } catch (err) {
-      setResponse("Something went wrong.");
       console.error(err);
+      setError("Something went wrong. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Dream Decoder</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+      <h1>Dream Decoder</h1>
+      <form onSubmit={handleSubmit}>
         <textarea
-          className="w-full p-2 border rounded"
-          rows="4"
-          placeholder="Describe your dream..."
           value={dream}
           onChange={(e) => setDream(e.target.value)}
+          placeholder="Describe your dream here..."
+          rows={5}
+          style={{ width: "100%", padding: "1rem", fontSize: "1rem" }}
         />
-        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" type="submit">
-          Decode Dream
+        <button type="submit" disabled={loading} style={{ marginTop: "1rem" }}>
+          {loading ? "Interpreting..." : "Decode Dream"}
         </button>
       </form>
-      {response && (
-        <div className="mt-4 p-4 bg-gray-100 border rounded">
-          <strong>Interpretation:</strong> {response}
+
+      {interpretation && (
+        <div style={{ marginTop: "2rem", whiteSpace: "pre-wrap" }}>
+          <strong>Interpretation:</strong>
+          <p>{interpretation}</p>
         </div>
       )}
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
+
+export default App;
