@@ -1,55 +1,67 @@
 import { useState } from "react";
 import axios from "axios";
 
-function App() {
+function DreamForm() {
   const [dream, setDream] = useState("");
-  const [interpretation, setInterpretation] = useState("");
+  const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setResult("");
     setError("");
-    setInterpretation("");
 
     try {
       const response = await axios.post("/api/dream", { dream });
-      setInterpretation(response.data.message);
+      setResult(response.data.message);
     } catch (err) {
       console.error(err);
-      setError("Something went wrong. Try again.");
+      setError("Something went wrong while decoding your dream.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>Dream Decoder</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-xl mx-auto mt-10 p-6 bg-white bg-opacity-80 rounded-2xl shadow-2xl backdrop-blur-lg border border-white border-opacity-30">
+      <h1 className="text-4xl font-extrabold text-center text-purple-800 mb-6 tracking-tight drop-shadow-md animate-fade-in">
+        🌌 Dream Decoder 🌙
+      </h1>
+      <form onSubmit={handleSubmit} className="mb-4">
         <textarea
+          className="w-full p-4 h-40 resize-none border-2 border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+          placeholder="Describe your dream in detail..."
           value={dream}
           onChange={(e) => setDream(e.target.value)}
-          placeholder="Describe your dream here..."
-          rows={5}
-          style={{ width: "100%", padding: "1rem", fontSize: "1rem" }}
-        />
-        <button type="submit" disabled={loading} style={{ marginTop: "1rem" }}>
-          {loading ? "Interpreting..." : "Decode Dream"}
+        ></textarea>
+        <button
+          type="submit"
+          className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-semibold hover:from-pink-500 hover:to-purple-500 transition-all duration-300 shadow-lg"
+        >
+          Decode My Dream
         </button>
       </form>
 
-      {interpretation && (
-        <div style={{ marginTop: "2rem", whiteSpace: "pre-wrap" }}>
-          <strong>Interpretation:</strong>
-          <p>{interpretation}</p>
+      {loading && (
+        <p className="text-center text-purple-600 font-medium animate-pulse">
+          Interpreting your dream...
+        </p>
+      )}
+      {error && (
+        <p className="text-center text-red-500 font-medium">{error}</p>
+      )}
+      {result && (
+        <div className="mt-6 p-4 bg-purple-100 bg-opacity-80 rounded-xl border-l-4 border-purple-500 shadow">
+          <h2 className="text-lg font-semibold text-purple-800 mb-2">
+            Interpretation:
+          </h2>
+          <p className="text-purple-700">{result}</p>
         </div>
       )}
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
 
-export default App;
+export default DreamForm;

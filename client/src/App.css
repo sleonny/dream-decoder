@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+body {
+  @apply bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-200 min-h-screen flex items-center justify-center;
+  font-family: 'Segoe UI', sans-serif;
+}
