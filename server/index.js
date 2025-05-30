@@ -15,5 +15,5 @@ const dreamRoutes = require("./routes/dream");
 app.use("/api/dream", dreamRoutes);
 
 app.listen(PORT, () => {
-  console.log("Server running on port ${PORT}");
+  console.log(`Server running on port ${PORT}`);
 });
