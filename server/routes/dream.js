@@ -31,11 +31,19 @@ router.post("/", async (req, res) => {
     const interpretation = completion.choices[0].message.content;
     res.json({ message: interpretation });
   } catch (error) {
-    console.error(error);
+    console.error(
+      "OpenAI Error:",
+      error.response?.data || error.message || error
+    );
     res
       .status(500)
       .json({ message: "Something went wrong with dream interpretation." });
   }
+  //   console.error(error);
+  //   res
+  //     .status(500)
+  //     .json({ message: "Something went wrong with dream interpretation." });
+  // }
 });
 
 module.exports = router;
